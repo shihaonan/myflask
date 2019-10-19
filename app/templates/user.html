@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<img src="{{ user.avatar(128) }}">
+<h1>{{ user.username }}</h1>
+{% if user.about_me %}
+    <p>{{ user.about_me }}</p>
+{% endif %}
+{% if user.last_seen %}
+    <p>最近登录: {{ user.last_seen }}</p>
+{% endif %}
+
+<p>
+    {{ user.followers.count() }}个粉丝
+    {% if not user == current_user %}
+        {% if not current_user.is_following(user) %}
+            | <a href="{{ url_for('follow',username = user.username) }}">关注他</a>
+        {% else %}
+            | <a href="{{ url_for('unfollow',username = user.username) }}">不再关注</a>
+        {% endif %}
+    {% endif %}
+</p>
+
+{% if user == current_user %}
+    <p>
+        <a href="{{ url_for('edit') }}">个人资料编辑</a>
+    </p>
+{% endif %}
+<hr>
+<form action="" method="post" name="post">
+    {{ form.hidden_tag() }}
+    <p>发表文章</p>
+    <p>
+        {{ form.post(size = 30,maxlength = 140) }}
+    </p>
+    <p>
+        {% for error in form.post.errors %}
+        <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        <input type="submit" value="提交">
+    </p>
+</form>
+
+{% for post in posts %}
+    {% include '_post.html' %}
+{% endfor %}
+
+
+
+{% endblock %}

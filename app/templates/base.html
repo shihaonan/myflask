@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+        <title>{{title}}</title>
+    {% else %}
+        <title>楠哥哥的网站</title>
+    {% endif %}
+    <meta http-equiv="keywords" content="关键词1,keyword2,keyword3">
+    <meta http-equiv="description" content="这是描述">
+    <link rel="stylesheet"  href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/style.css"/>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        body{
+            margin-top: 0px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" >浩楠的博客</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="{{ url_for('index') }}">首页</a></li>
+
+            <li><a href="#about">关于</a></li>
+            <li><a href="#contact">联系我们</a></li>
+          </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('logout') }}">退出</a></li>
+                <li><a href="{{ url_for('user',username=current_user.username) }}">用户中心</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}">登录</a></li>
+                <li><a href="{{ url_for('register') }}">注册</a></li>
+              {% endif %}
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ur>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ur>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    </div>
+</body>
+</html>
